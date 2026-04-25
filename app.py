@@ -15,7 +15,7 @@ with st.expander("系统范围说明", expanded=False):
         f"""
 - 城市：**济南市**
 - 站点：**贝壳租房**（{JN_BEIKE_URL}）
-- 功能：需求解析 → 抓取/回退样例 → 过滤打分 → 可解释推荐
+- 功能：需求解析 → 抓取/回退样例 → 硬筛选 → 打分排序 → 可解释推荐
         """
     )
 
@@ -31,11 +31,15 @@ with col2:
 if run:
     result = recommend(user_text, top_k=top_k)
 
-    st.subheader("1) 结构化需求（解析结果）")
+    st.subheader("1) 智能体执行日志")
+    for log in result.get("stage_logs", []):
+        st.write(f"- **{log['stage']}**: {log['message']}")
+
+    st.subheader("2) 结构化需求（解析结果）")
     st.json(asdict(result["query"]))
 
-    st.subheader("2) 推荐结果（可解释）")
-    st.write(f"候选房源总数：{result['total_candidates']}")
+    st.subheader("3) 推荐结果（可解释）")
+    st.write(f"抓取候选：{result['total_candidates']} | 硬筛后：{result['filtered_candidates']}")
 
     for idx, item in enumerate(result["recommendations"], start=1):
         with st.container(border=True):
@@ -54,7 +58,7 @@ if run:
             else:
                 st.write("⚠️ 当前未命中显式偏好，按基础条件排序")
 
-    st.subheader("3) 原始结果 JSON（调试）")
+    st.subheader("4) 原始结果 JSON（调试）")
     st.code(json.dumps(result, ensure_ascii=False, indent=2, default=str), language="json")
 else:
     st.info("输入需求并点击“开始推荐”查看结果。")
