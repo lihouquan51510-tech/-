@@ -33,6 +33,24 @@ class AgentStageLog:
     message: str
 
 
+def _cn_num_to_int(token: str) -> int | None:
+    token = token.strip()
+    digit_map = {"零": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+    if token.isdigit():
+        return int(token)
+    if token in digit_map:
+        return digit_map[token]
+    if token == "十":
+        return 10
+    if token.startswith("十") and len(token) == 2 and token[1] in digit_map:
+        return 10 + digit_map[token[1]]
+    if token.endswith("十") and len(token) == 2 and token[0] in digit_map:
+        return digit_map[token[0]] * 10
+    if "十" in token and len(token) == 3 and token[0] in digit_map and token[2] in digit_map:
+        return digit_map[token[0]] * 10 + digit_map[token[2]]
+    return None
+
+
 def parse_user_query(raw_text: str) -> UserQuery:
     """规则解析器（MVP）。
 
@@ -51,12 +69,17 @@ def parse_user_query(raw_text: str) -> UserQuery:
     if budget_match:
         budget = int(budget_match.group(1))
 
-    bed_match = re.search(r"([一二三四1234])居|([一二三四1234])室", raw_text)
-    if bed_match:
-        token = bed_match.group(1) or bed_match.group(2)
-        map_cn = {"一": 1, "二": 2, "三": 3, "四": 4}
-        if token:
-            bedrooms = map_cn[token] if token in map_cn else int(token)
+    bed_patterns = [
+        r"([零一二两三四五六七八九十\d]+)室",
+        r"([零一二两三四五六七八九十\d]+)居",
+    ]
+    for pattern in bed_patterns:
+        bed_match = re.search(pattern, raw_text)
+        if bed_match:
+            value = _cn_num_to_int(bed_match.group(1))
+            if value is not None and 0 < value <= 10:
+                bedrooms = value
+                break
 
     if "整租" in raw_text:
         rent_type = "整租"

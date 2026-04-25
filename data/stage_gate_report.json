@@ -1,5 +1,5 @@
 {
-  "all_passed": false,
+  "all_passed": true,
   "stages": [
     {
       "stage_id": "stage_0",
@@ -24,12 +24,12 @@
     {
       "stage_id": "stage_2",
       "stage_name": "需求解析",
-      "passed": false,
+      "passed": true,
       "metrics": {
         "budget_hit": "16/16",
-        "bedroom_hit": "2/6",
+        "bedroom_hit": "6/6",
         "budget_acc": 1.0,
-        "bedroom_acc": 0.3333
+        "bedroom_acc": 1.0
       },
       "next_stage_hint": "是否进入 Stage 3（匹配推荐）？"
     },
@@ -64,7 +64,7 @@
         "has_baseline_report": true,
         "baseline_total_cases": 20,
         "budget_match_count": 20,
-        "bedrooms_match_count": 16
+        "bedrooms_match_count": 20
       },
       "next_stage_hint": "是否进入下一里程碑（LLM 解析 / 向量召回 / 多站点）？"
     }

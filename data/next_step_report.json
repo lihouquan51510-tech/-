@@ -1,7 +1,7 @@
 {
   "total_cases": 20,
   "budget_match_count": 20,
-  "bedrooms_match_count": 16,
+  "bedrooms_match_count": 20,
   "rows": [
     {
       "id": 1,
@@ -52,11 +52,11 @@
       "category": "生活品质型",
       "raw_text": "预算 9000。小区环境要好，最好周边有公园或者小区自带健身房。两室一厅，其中一间我要改成撸铁房。",
       "parse_hit_budget": true,
-      "parse_hit_bedrooms": false,
-      "top1_title": "济南高新区 万达旁精装一居",
-      "top1_score": 35.0,
+      "parse_hit_bedrooms": true,
+      "top1_title": "历下区 奥体西路 两居南北通透",
+      "top1_score": 55.0,
       "candidate_count": 5,
-      "filtered_count": 5
+      "filtered_count": 3
     },
     {
       "id": 6,
@@ -74,11 +74,11 @@
       "category": "家庭/多人居住型",
       "raw_text": "找明珠小学附近的房子，两室。预算 12000 左右，家具要环保，家里有小孩，楼层不要太高，或者必须有电梯。",
       "parse_hit_budget": true,
-      "parse_hit_bedrooms": false,
+      "parse_hit_bedrooms": true,
       "top1_title": "历下区 奥体西路 两居南北通透",
-      "top1_score": 40.0,
+      "top1_score": 60.0,
       "candidate_count": 5,
-      "filtered_count": 5
+      "filtered_count": 3
     },
     {
       "id": 8,
@@ -96,11 +96,11 @@
       "category": "家庭/多人居住型",
       "raw_text": "两个女生合租，希望找双南的两居室，预算每人 4000。地点在杨浦五角场，离商场近一点，方便逛街吃夜宵。",
       "parse_hit_budget": true,
-      "parse_hit_bedrooms": false,
+      "parse_hit_bedrooms": true,
       "top1_title": "槐荫区 西客站 合租主卧带独卫",
-      "top1_score": 15.0,
+      "top1_score": 35.0,
       "candidate_count": 5,
-      "filtered_count": 5
+      "filtered_count": 3
     },
     {
       "id": 10,
@@ -195,11 +195,11 @@
       "category": "紧急敏感型",
       "raw_text": "必须自带固定车位或者好停车，停车费不能太贵。两室，预算 7000，闵行莘庄。",
       "parse_hit_budget": true,
-      "parse_hit_bedrooms": false,
+      "parse_hit_bedrooms": true,
       "top1_title": "市中区 英雄山路 三居整租",
-      "top1_score": 40.0,
+      "top1_score": 60.0,
       "candidate_count": 5,
-      "filtered_count": 5
+      "filtered_count": 3
     },
     {
       "id": 19,
