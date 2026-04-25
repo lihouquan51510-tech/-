@@ -39,10 +39,14 @@ if run:
     for log in result.get("stage_logs", []):
         st.write(f"- **{log['stage']}**: {log['message']}")
 
-    st.subheader("2) 结构化需求（解析结果）")
+
+    st.subheader("2) 解析融合信息（Voting Meta）")
+    st.json(result.get("parse_meta", {}))
+
+    st.subheader("3) 结构化需求（解析结果）")
     st.json(asdict(result["query"]))
 
-    st.subheader("3) 推荐结果（可解释）")
+    st.subheader("4) 推荐结果（可解释）")
     st.write(f"抓取候选：{result['total_candidates']} | 硬筛后：{result['filtered_candidates']}")
 
     for idx, item in enumerate(result["recommendations"], start=1):
@@ -62,7 +66,7 @@ if run:
             else:
                 st.write("⚠️ 当前未命中显式偏好，按基础条件排序")
 
-    st.subheader("4) 原始结果 JSON（调试）")
+    st.subheader("5) 原始结果 JSON（调试）")
     st.code(json.dumps(result, ensure_ascii=False, indent=2, default=str), language="json")
 else:
     st.info("输入需求并点击“开始推荐”查看结果。")

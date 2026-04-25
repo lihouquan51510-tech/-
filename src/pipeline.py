@@ -135,6 +135,67 @@ def parse_user_query(raw_text: str) -> UserQuery:
     )
 
 
+def _merge_queries(rule_query: UserQuery, llm_query: UserQuery | None) -> tuple[UserQuery, dict[str, Any]]:
+    """LLM + Rule 融合投票：优先一致性，冲突时按稳定性启发式选择。"""
+    if llm_query is None:
+        return rule_query, {"mode": "rule_only", "conflicts": [], "agreements": []}
+
+    merged = UserQuery(raw_text=rule_query.raw_text)
+    conflicts: list[str] = []
+    agreements: list[str] = []
+
+    # budget: 若冲突较大，优先规则；冲突较小取较保守值（较小预算）
+    rb, lb = rule_query.budget_max, llm_query.budget_max
+    if rb is None and lb is None:
+        merged.budget_max = None
+    elif rb is None:
+        merged.budget_max = lb
+    elif lb is None:
+        merged.budget_max = rb
+    elif rb == lb:
+        merged.budget_max = rb
+        agreements.append("budget_max")
+    else:
+        conflicts.append(f"budget_max(rule={rb},llm={lb})")
+        gap = abs(rb - lb) / max(rb, 1)
+        merged.budget_max = rb if gap > 0.4 else min(rb, lb)
+
+    # bedrooms: 取合法范围且更保守（较大卧室需求）
+    rr, lr = rule_query.bedrooms, llm_query.bedrooms
+    valid = [x for x in [rr, lr] if isinstance(x, int) and 0 < x <= 10]
+    if rr is not None and lr is not None and rr == lr:
+        agreements.append("bedrooms")
+    elif rr is not None and lr is not None and rr != lr:
+        conflicts.append(f"bedrooms(rule={rr},llm={lr})")
+    merged.bedrooms = max(valid) if valid else (rr if rr is not None else lr)
+
+    # 其余字段：一致优先；冲突默认规则优先（稳定）
+    for field in ["rent_type", "district", "subdistrict", "urgency"]:
+        rv = getattr(rule_query, field)
+        lv = getattr(llm_query, field)
+        if rv is None and lv is None:
+            val = None
+        elif rv is None:
+            val = lv
+        elif lv is None:
+            val = rv
+        elif rv == lv:
+            agreements.append(field)
+            val = rv
+        else:
+            conflicts.append(f"{field}(rule={rv},llm={lv})")
+            val = rv
+        setattr(merged, field, val)
+
+    # list 字段合并去重，既保留规则稳定性也吸收 LLM 补充
+    must = list(dict.fromkeys((rule_query.must_have or []) + (llm_query.must_have or [])))
+    avoid = list(dict.fromkeys((rule_query.avoid or []) + (llm_query.avoid or [])))
+    merged.must_have = must or None
+    merged.avoid = avoid or None
+
+    return merged, {"mode": "fusion", "conflicts": conflicts, "agreements": agreements}
+
+
 def _parse_layout_bedrooms(layout: str) -> int | None:
     m = re.search(r"(\d)室", layout)
     return int(m.group(1)) if m else None
@@ -300,19 +361,26 @@ def score_listing(query: UserQuery, listing: dict[str, Any]) -> tuple[float, lis
 def recommend(raw_text: str, top_k: int = 5, use_llm_parser: bool = False) -> dict[str, Any]:
     logs: list[AgentStageLog] = []
 
-    query = None
+    rule_query = parse_user_query(raw_text)
+    llm_query = None
+    parse_meta: dict[str, Any] = {"mode": "rule_only", "conflicts": [], "agreements": []}
+
     if use_llm_parser:
         try:
             from src.llm_parser import parse_query_with_llm
-            query = parse_query_with_llm(raw_text)
+            llm_query = parse_query_with_llm(raw_text)
         except Exception:
-            query = None
+            llm_query = None
 
-    if query is None:
-        query = parse_user_query(raw_text)
-        logs.append(AgentStageLog(stage="parse", message="已完成规则解析（Rule Parser）"))
+    if use_llm_parser:
+        query, parse_meta = _merge_queries(rule_query, llm_query)
+        if parse_meta.get("mode") == "fusion":
+            logs.append(AgentStageLog(stage="parse", message="已完成融合解析（LLM + Rule Voting）"))
+        else:
+            logs.append(AgentStageLog(stage="parse", message="LLM 不可用，已回退规则解析（Rule Parser）"))
     else:
-        logs.append(AgentStageLog(stage="parse", message="已完成 LLM 解析（LLM Parser）"))
+        query = rule_query
+        logs.append(AgentStageLog(stage="parse", message="已完成规则解析（Rule Parser）"))
 
     listings = crawl_beike_jinan()
     logs.append(AgentStageLog(stage="crawl", message=f"候选房源抓取完成，共 {len(listings)} 条"))
@@ -331,6 +399,7 @@ def recommend(raw_text: str, top_k: int = 5, use_llm_parser: bool = False) -> di
 
     return {
         "query": query,
+        "parse_meta": parse_meta,
         "stage_logs": [asdict(x) for x in logs],
         "total_candidates": len(listings),
         "filtered_candidates": len(filtered),

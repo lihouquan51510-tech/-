@@ -14,6 +14,7 @@ from src.pipeline import recommend
 def main() -> None:
     query = "预算 6000，两室，历下区，地铁近。"
     result = recommend(query, top_k=3, use_llm_parser=True)
+    print("parse_meta=", json.dumps(result.get("parse_meta", {}), ensure_ascii=False))
     stage_logs = result.get("stage_logs", [])
     print(json.dumps(stage_logs, ensure_ascii=False, indent=2))
     print("recommendation_count=", len(result.get("recommendations", [])))
