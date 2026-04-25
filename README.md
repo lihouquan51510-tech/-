@@ -11,10 +11,12 @@
 - `app.py`：Streamlit 页面入口（含智能体执行日志）
 - `src/pipeline.py`：抓取、解析、硬筛、打分、推荐主流程
 - `scripts/run_next_step.py`：基于 20 条样本的下一步验证脚本
+- `scripts/stage_gate_runner.py`：阶段闸门执行器（每阶段自动测试 + 下一阶段提示）
+- `docs/agent_development_stages.md`：完整智能体开发阶段与 Gate 规则
 - `data/test_cases_jinan_beike.json`：20 条用户需求样本
 - `data/sample_listings_jn.json`：抓取失败时回退的本地样例房源
-- `data/next_step_report.json`：脚本输出的阶段报告（运行后生成）
-- `AI_选房智能体_MVP需求说明书.md`：需求说明书文档
+- `data/next_step_report.json`：解析与推荐基线报告
+- `data/stage_gate_report.json`：阶段闸门执行报告（运行后生成）
 
 ## 快速开始
 
@@ -27,21 +29,33 @@ streamlit run app.py
 
 打开浏览器访问 `http://localhost:8501`。
 
-## 下一步工作（已落地）
+## 阶段化开发（新增）
 
-根据需求说明书，本阶段已补齐“智能体开发流程”的执行与验证：
+根据需求说明书，现已落地完整 Stage-Gate 流程：
 
-1. **Parse**：自然语言需求结构化（预算/户型/区域/偏好/避让项）
-2. **Crawl**：抓取贝壳济南租房列表，失败时回退样例
-3. **Filter**：硬筛选（预算上浮阈值、最少居室数、行政区）
-4. **Rank**：可解释打分排序（预算、户型、区域、偏好、避让项、紧急程度）
-5. **Evaluate**：使用 `scripts/run_next_step.py` 批量跑 20 条样本并输出报告
+1. Stage 0 范围冻结
+2. Stage 1 数据采集
+3. Stage 2 需求解析
+4. Stage 3 匹配推荐
+5. Stage 4 交互展示
+6. Stage 5 验收迭代
 
-运行：
+执行方式：
 
 ```bash
-python scripts/run_next_step.py
+python scripts/stage_gate_runner.py
 ```
+
+该脚本会：
+- 每阶段执行样例数据功能测试
+- 输出每个阶段的通过状态
+- 输出“是否进入下一个阶段”的 Gate 提示
+- 生成 `data/stage_gate_report.json`
+
+## 截图工具接口说明
+
+- Stage 4 需要通过浏览器截图工具接口完成页面截图留档。
+- 若当前环境无可用浏览器截图能力，请在报告中标记 `pending_or_blocked_by_environment`。
 
 ## 说明
 
