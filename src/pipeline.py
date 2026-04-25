@@ -358,7 +358,7 @@ def score_listing(query: UserQuery, listing: dict[str, Any]) -> tuple[float, lis
     return round(score, 2), reasons
 
 
-def recommend(raw_text: str, top_k: int = 5, use_llm_parser: bool = False) -> dict[str, Any]:
+def recommend(raw_text: str, top_k: int = 5, use_llm_parser: bool = False, use_semantic_recall: bool = False) -> dict[str, Any]:
     logs: list[AgentStageLog] = []
 
     rule_query = parse_user_query(raw_text)
@@ -389,10 +389,21 @@ def recommend(raw_text: str, top_k: int = 5, use_llm_parser: bool = False) -> di
     logs.append(AgentStageLog(stage="filter", message=f"硬筛选后剩余 {len(filtered)} 条"))
 
     pool = filtered if filtered else listings
+    if use_semantic_recall:
+        try:
+            from src.semantic_recall import semantic_recall
+            pool = semantic_recall(raw_text, pool, top_n=max(top_k * 4, top_k))
+            logs.append(AgentStageLog(stage="recall", message=f"语义召回完成，候选收敛至 {len(pool)} 条"))
+        except Exception:
+            logs.append(AgentStageLog(stage="recall", message="语义召回失败，已跳过"))
+
     scored = []
     for item in pool:
         s, reasons = score_listing(query, item)
-        scored.append({**item, "score": s, "reasons": reasons})
+        if item.get("semantic_score") is not None:
+            s += float(item["semantic_score"]) * 10
+            reasons.append(f"语义相关度加分：{item['semantic_score']}")
+        scored.append({**item, "score": round(s, 2), "reasons": reasons})
 
     ranked = sorted(scored, key=lambda x: x["score"], reverse=True)
     logs.append(AgentStageLog(stage="rank", message=f"排序完成，返回 Top {top_k}"))

@@ -11,6 +11,7 @@
 - `app.py`：Streamlit 页面入口（含智能体执行日志）
 - `src/pipeline.py`：抓取、解析、硬筛、打分、推荐主流程
 - `src/llm_parser.py`：下一里程碑实验能力（LLM 结构化解析，失败回退规则）
+- `src/semantic_recall.py`：无依赖语义召回（轻量向量化+余弦相似度）
 - `scripts/run_next_step.py`：基于 20 条样本的下一步验证脚本
 - `scripts/stage_gate_runner.py`：阶段闸门执行器（每阶段自动测试 + 下一阶段提示）
 - `docs/agent_development_stages.md`：完整智能体开发阶段与 Gate 规则
@@ -49,10 +50,11 @@ python scripts/stage_gate_runner.py
 
 ## 下一里程碑（已启动）
 
-已新增 **LLM + Rule 融合投票解析能力**：
+已新增 **LLM + Rule 融合投票解析能力**，并启动 **语义召回实验**：
 - UI 勾选“启用 LLM 结构化解析”后，会先执行 LLM 解析，再与规则解析做融合投票。
 - 一致字段直接采用；冲突字段按稳定性启发式处理（如预算冲突大时优先规则、卧室数取更保守值）。
 - 如 LLM 调用失败，会自动回退规则解析，保证流程不中断。
+- 可选启用语义召回，对候选房源做相关度预排序并在最终打分中注入语义加分。
 
 环境变量：
 

@@ -32,8 +32,10 @@ use_llm = st.checkbox("启用 LLM 结构化解析（下一里程碑实验）", v
 if use_llm:
     st.caption("需要设置 OPENAI_API_KEY（可选 OPENAI_BASE_URL / OPENAI_MODEL）。失败会自动回退规则解析。")
 
+use_semantic_recall = st.checkbox("启用语义召回（下一里程碑实验）", value=False)
+
 if run:
-    result = recommend(user_text, top_k=top_k, use_llm_parser=use_llm)
+    result = recommend(user_text, top_k=top_k, use_llm_parser=use_llm, use_semantic_recall=use_semantic_recall)
 
     st.subheader("1) 智能体执行日志")
     for log in result.get("stage_logs", []):
