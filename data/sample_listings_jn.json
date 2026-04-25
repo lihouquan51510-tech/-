@@ -1,0 +1,57 @@
+[
+  {
+    "title": "济南高新区 万达旁精装一居",
+    "price": 3200,
+    "layout": "1室1厅",
+    "area_sqm": 45,
+    "district": "高新",
+    "subdistrict": "会展中心",
+    "tags": ["精装", "近地铁", "随时看房"],
+    "url": "https://jn.ke.com/zufang/1.html",
+    "description": "拎包入住，距离地铁步行约8分钟，采光好。"
+  },
+  {
+    "title": "历下区 奥体西路 两居南北通透",
+    "price": 4800,
+    "layout": "2室1厅",
+    "area_sqm": 78,
+    "district": "历下",
+    "subdistrict": "奥体",
+    "tags": ["南北通透", "电梯", "近商圈"],
+    "url": "https://jn.ke.com/zufang/2.html",
+    "description": "小区环境好，周边商场齐全，适合家庭。"
+  },
+  {
+    "title": "槐荫区 西客站 合租主卧带独卫",
+    "price": 2200,
+    "layout": "4室1厅",
+    "area_sqm": 20,
+    "district": "槐荫",
+    "subdistrict": "西客站",
+    "tags": ["合租", "主卧", "独卫"],
+    "url": "https://jn.ke.com/zufang/3.html",
+    "description": "主卧带独立卫生间，近公交地铁。"
+  },
+  {
+    "title": "市中区 英雄山路 三居整租",
+    "price": 6500,
+    "layout": "3室2厅",
+    "area_sqm": 118,
+    "district": "市中",
+    "subdistrict": "英雄山",
+    "tags": ["整租", "可养宠", "停车方便"],
+    "url": "https://jn.ke.com/zufang/4.html",
+    "description": "三居大户型，车位充足，适合多人居住。"
+  },
+  {
+    "title": "历城区 王舍人 地铁口开间",
+    "price": 2700,
+    "layout": "1室0厅",
+    "area_sqm": 38,
+    "district": "历城",
+    "subdistrict": "王舍人",
+    "tags": ["开间", "近地铁", "简装"],
+    "url": "https://jn.ke.com/zufang/5.html",
+    "description": "开间户型，干净简单，适合单身通勤。"
+  }
+]

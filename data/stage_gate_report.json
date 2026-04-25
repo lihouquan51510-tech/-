@@ -1,0 +1,72 @@
+{
+  "all_passed": true,
+  "stages": [
+    {
+      "stage_id": "stage_0",
+      "stage_name": "范围冻结",
+      "passed": true,
+      "metrics": {
+        "case_count": 20,
+        "required_fields_ok": true
+      },
+      "next_stage_hint": "是否进入 Stage 1（数据采集）？"
+    },
+    {
+      "stage_id": "stage_1",
+      "stage_name": "数据采集",
+      "passed": true,
+      "metrics": {
+        "listing_count": 5,
+        "top_title": "济南高新区 万达旁精装一居"
+      },
+      "next_stage_hint": "是否进入 Stage 2（需求解析）？"
+    },
+    {
+      "stage_id": "stage_2",
+      "stage_name": "需求解析",
+      "passed": true,
+      "metrics": {
+        "budget_hit": "16/16",
+        "bedroom_hit": "6/6",
+        "budget_acc": 1.0,
+        "bedroom_acc": 1.0
+      },
+      "next_stage_hint": "是否进入 Stage 3（匹配推荐）？"
+    },
+    {
+      "stage_id": "stage_3",
+      "stage_name": "匹配推荐",
+      "passed": true,
+      "metrics": {
+        "non_empty_reco": "20/20",
+        "non_empty_rate": 1.0
+      },
+      "next_stage_hint": "是否进入 Stage 4（UI 展示）？"
+    },
+    {
+      "stage_id": "stage_4",
+      "stage_name": "交互展示",
+      "passed": true,
+      "metrics": {
+        "has_stage_log": true,
+        "has_reason": true,
+        "has_json_debug": true,
+        "screenshot_required": true,
+        "screenshot_status": "pending_or_blocked_by_environment"
+      },
+      "next_stage_hint": "是否进入 Stage 5（验收迭代）？"
+    },
+    {
+      "stage_id": "stage_5",
+      "stage_name": "验收与迭代",
+      "passed": true,
+      "metrics": {
+        "has_baseline_report": true,
+        "baseline_total_cases": 20,
+        "budget_match_count": 20,
+        "bedrooms_match_count": 20
+      },
+      "next_stage_hint": "是否进入下一里程碑（LLM 解析 / 向量召回 / 多站点）？"
+    }
+  ]
+}
