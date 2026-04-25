@@ -1,0 +1,231 @@
+{
+  "scope": {
+    "city": "济南",
+    "source": "贝壳租房",
+    "base_url": "https://jn.ke.com/zufang/"
+  },
+  "test_cases": [
+    {
+      "id": 1,
+      "category": "职场刚需型",
+      "raw_text": "在张江高科技园区上班，预算 6500 以内。希望是整租一居室，地铁 2 号线直达，通勤 30 分钟内，洗手间要有窗户。",
+      "target_params": {
+        "work_location": "张江高科技园区",
+        "budget_max": 6500,
+        "rent_type": "整租",
+        "bedrooms": 1,
+        "metro_line": "2号线",
+        "commute_time_limit": 30,
+        "specific_requirements": ["明卫"]
+      }
+    },
+    {
+      "id": 2,
+      "category": "职场刚需型",
+      "raw_text": "陆家嘴上班，预算 4000。接受合租，只要主卧带独卫。离地铁站步行 5 分钟内，因为经常加班想回家快一点。",
+      "target_params": {
+        "work_location": "陆家嘴",
+        "budget_max": 4000,
+        "rent_type": "合租",
+        "room_type": "主卧带独卫",
+        "metro_proximity_min": 5
+      }
+    },
+    {
+      "id": 3,
+      "category": "职场刚需型",
+      "raw_text": "静安寺周边，预算 8000。想要老洋房或者有格调的新公寓，采光要好，要有开放式厨房。",
+      "target_params": {
+        "location": "静安寺",
+        "budget_max": 8000,
+        "property_style": ["老洋房", "新公寓"],
+        "features": ["好采光", "开放式厨房"]
+      }
+    },
+    {
+      "id": 4,
+      "category": "生活品质型",
+      "raw_text": "预算 7000，坐标徐汇。一定要能养猫，房东好说话。朝南，阳光要充足，阳台最好大一点。",
+      "target_params": {
+        "district": "徐汇",
+        "budget_max": 7000,
+        "pet_policy": "allow_cats",
+        "orientation": "南",
+        "features": ["阳台"]
+      }
+    },
+    {
+      "id": 5,
+      "category": "生活品质型",
+      "raw_text": "预算 9000。小区环境要好，最好周边有公园或者小区自带健身房。两室一厅，其中一间我要改成撸铁房。",
+      "target_params": {
+        "budget_max": 9000,
+        "bedrooms": 2,
+        "amenities": ["公园", "健身房"],
+        "purpose": "home_gym"
+      }
+    },
+    {
+      "id": 6,
+      "category": "生活品质型",
+      "raw_text": "找长宁区的房子，预算 7500。精装修，一定要有衣帽间，或者是收纳空间足够多。不喜欢太旧的小区。",
+      "target_params": {
+        "district": "长宁",
+        "budget_max": 7500,
+        "decoration": "精装",
+        "features": ["衣帽间", "大收纳"],
+        "avoid": ["老旧小区"]
+      }
+    },
+    {
+      "id": 7,
+      "category": "家庭/多人居住型",
+      "raw_text": "找明珠小学附近的房子，两室。预算 12000 左右，家具要环保，家里有小孩，楼层不要太高，或者必须有电梯。",
+      "target_params": {
+        "landmark": "明珠小学",
+        "bedrooms": 2,
+        "budget_target": 12000,
+        "features": ["环保家具", "电梯", "低楼层"]
+      }
+    },
+    {
+      "id": 8,
+      "category": "家庭/多人居住型",
+      "raw_text": "浦东三林附近，三室。预算 15000。希望附近有大型超市（如山姆或盒马），小区绿化率高，有小朋友玩的滑梯。",
+      "target_params": {
+        "subdistrict": "三林",
+        "bedrooms": 3,
+        "budget_max": 15000,
+        "surroundings": ["山姆", "盒马"],
+        "community_features": ["高绿化", "儿童设施"]
+      }
+    },
+    {
+      "id": 9,
+      "category": "家庭/多人居住型",
+      "raw_text": "两个女生合租，希望找双南的两居室，预算每人 4000。地点在杨浦五角场，离商场近一点，方便逛街吃夜宵。",
+      "target_params": {
+        "district": "杨浦",
+        "subdistrict": "五角场",
+        "total_budget": 8000,
+        "bedrooms": 2,
+        "orientation": "双南",
+        "surroundings": ["商场", "夜市"]
+      }
+    },
+    {
+      "id": 10,
+      "category": "性价比/特殊型",
+      "raw_text": "不挑地段，但网速要快。预算 3000。想要个大开间，采光必须满分，周围要安静，不能有施工噪音。",
+      "target_params": {
+        "budget_max": 3000,
+        "property_type": "studio",
+        "requirements": ["高网速", "安静"],
+        "avoid": ["施工噪音"]
+      }
+    },
+    {
+      "id": 11,
+      "category": "性价比/特殊型",
+      "raw_text": "只要一张床一个桌子，空房子也可以。预算 2500，离地铁站两公里内（我可以骑单车）。最好是原始户型，不要隔断间。",
+      "target_params": {
+        "budget_max": 2500,
+        "metro_distance_km": 2,
+        "decoration": "简装/空房",
+        "avoid": ["隔断间"]
+      }
+    },
+    {
+      "id": 12,
+      "category": "性价比/特殊型",
+      "raw_text": "想要带露台或者大天台的房子，可以种花。地段不限，只要在上海市内。预算 6000 左右。",
+      "target_params": {
+        "budget_target": 6000,
+        "city": "上海",
+        "features": ["露台", "天台"]
+      }
+    },
+    {
+      "id": 13,
+      "category": "模糊语义型",
+      "raw_text": "最近在考虑搬家，想看徐家汇附近比较‘清幽’的房子。预算没上限，只要一眼看中就行。",
+      "target_params": {
+        "district": "徐家汇",
+        "vibe": "清幽",
+        "budget_max": null
+      }
+    },
+    {
+      "id": 14,
+      "category": "模糊语义型",
+      "raw_text": "千万不要临街，不要顶楼，不要一楼。预算 5500。想要住在‘有人烟味’但不嘈杂的老社区。",
+      "target_params": {
+        "budget_max": 5500,
+        "avoid": ["临街", "顶楼", "一楼"],
+        "community_vibe": "烟火气但安静"
+      }
+    },
+    {
+      "id": 15,
+      "category": "模糊语义型",
+      "raw_text": "我不喜欢灰蒙蒙的装修，想要原木风或者奶油风的精装房。预算 8000，定位虹桥。",
+      "target_params": {
+        "location": "虹桥",
+        "budget_max": 8000,
+        "style_preference": ["原木风", "奶油风"]
+      }
+    },
+    {
+      "id": 16,
+      "category": "紧急敏感型",
+      "raw_text": "下周一入职，这周末必须定下来。能随时看房、拎包入住的。预算 5000，南翔附近。",
+      "target_params": {
+        "subdistrict": "南翔",
+        "budget_max": 5000,
+        "urgency": "high",
+        "features": ["拎包入住", "随时看房"]
+      }
+    },
+    {
+      "id": 17,
+      "category": "紧急敏感型",
+      "raw_text": "只要租 3 个月过渡。预算 4500，接受公寓，最好有管家服务，不需要付三押一的那种。",
+      "target_params": {
+        "budget_max": 4500,
+        "duration": "short_term_3_months",
+        "property_type": "apartment",
+        "payment_flexibility": "no_standard_deposit"
+      }
+    },
+    {
+      "id": 18,
+      "category": "紧急敏感型",
+      "raw_text": "必须自带固定车位或者好停车，停车费不能太贵。两室，预算 7000，闵行莘庄。",
+      "target_params": {
+        "subdistrict": "莘庄",
+        "bedrooms": 2,
+        "budget_max": 7000,
+        "parking": "fixed_or_easy"
+      }
+    },
+    {
+      "id": 19,
+      "category": "紧急敏感型",
+      "raw_text": "我是搞运动的，身高两米，希望层高不要太压抑，床要 2 米的大床。预算 10000。",
+      "target_params": {
+        "budget_max": 10000,
+        "features": ["高层高", "2米大床"]
+      }
+    },
+    {
+      "id": 20,
+      "category": "紧急敏感型",
+      "raw_text": "预算 3500。只要地铁首发站附近的房子，为了上班有座位。希望房子干净简单。",
+      "target_params": {
+        "budget_max": 3500,
+        "location_preference": "metro_starting_station",
+        "style": "clean_simple"
+      }
+    }
+  ]
+}
