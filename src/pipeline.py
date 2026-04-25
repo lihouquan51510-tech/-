@@ -297,11 +297,22 @@ def score_listing(query: UserQuery, listing: dict[str, Any]) -> tuple[float, lis
     return round(score, 2), reasons
 
 
-def recommend(raw_text: str, top_k: int = 5) -> dict[str, Any]:
+def recommend(raw_text: str, top_k: int = 5, use_llm_parser: bool = False) -> dict[str, Any]:
     logs: list[AgentStageLog] = []
 
-    query = parse_user_query(raw_text)
-    logs.append(AgentStageLog(stage="parse", message="已完成需求结构化解析"))
+    query = None
+    if use_llm_parser:
+        try:
+            from src.llm_parser import parse_query_with_llm
+            query = parse_query_with_llm(raw_text)
+        except Exception:
+            query = None
+
+    if query is None:
+        query = parse_user_query(raw_text)
+        logs.append(AgentStageLog(stage="parse", message="已完成规则解析（Rule Parser）"))
+    else:
+        logs.append(AgentStageLog(stage="parse", message="已完成 LLM 解析（LLM Parser）"))
 
     listings = crawl_beike_jinan()
     logs.append(AgentStageLog(stage="crawl", message=f"候选房源抓取完成，共 {len(listings)} 条"))

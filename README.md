@@ -10,6 +10,7 @@
 
 - `app.py`：Streamlit 页面入口（含智能体执行日志）
 - `src/pipeline.py`：抓取、解析、硬筛、打分、推荐主流程
+- `src/llm_parser.py`：下一里程碑实验能力（LLM 结构化解析，失败回退规则）
 - `scripts/run_next_step.py`：基于 20 条样本的下一步验证脚本
 - `scripts/stage_gate_runner.py`：阶段闸门执行器（每阶段自动测试 + 下一阶段提示）
 - `docs/agent_development_stages.md`：完整智能体开发阶段与 Gate 规则
@@ -29,9 +30,9 @@ streamlit run app.py
 
 打开浏览器访问 `http://localhost:8501`。
 
-## 阶段化开发（新增）
+## 阶段化开发
 
-根据需求说明书，现已落地完整 Stage-Gate 流程：
+根据需求说明书，已落地 Stage-Gate 流程：
 
 1. Stage 0 范围冻结
 2. Stage 1 数据采集
@@ -46,11 +47,19 @@ streamlit run app.py
 python scripts/stage_gate_runner.py
 ```
 
-该脚本会：
-- 每阶段执行样例数据功能测试
-- 输出每个阶段的通过状态
-- 输出“是否进入下一个阶段”的 Gate 提示
-- 生成 `data/stage_gate_report.json`
+## 下一里程碑（已启动）
+
+已新增 **LLM 结构化解析实验能力**：
+- UI 勾选“启用 LLM 结构化解析”即可尝试 LLM parser。
+- 如 LLM 调用失败，会自动回退规则解析，保证流程不中断。
+
+环境变量：
+
+```bash
+export OPENAI_API_KEY=your_key
+export OPENAI_BASE_URL=https://api.openai.com/v1    # 可选
+export OPENAI_MODEL=gpt-4.1-mini                    # 可选
+```
 
 ## 截图工具接口说明
 
@@ -65,6 +74,6 @@ python scripts/stage_gate_runner.py
 
 ## 可扩展项
 
-- 替换需求解析器为 LLM API（结构化 JSON 输出）
+- LLM 解析结果与规则解析结果做融合投票
 - 增加向量召回与多维权重学习
 - 接入 PostgreSQL + 定时任务（APScheduler/Celery）
